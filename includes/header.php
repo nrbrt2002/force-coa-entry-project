@@ -5,6 +5,9 @@ if(!$_SESSION['name']){
     header("Location: login.php");
 }
 
+$select_balance_query = mysqli_query($connection, "SELECT * FROM budget WHERE month_year = DATE_FORMAT(NOW(), '%m-%Y')");
+$budget = mysqli_fetch_array($select_balance_query);
+$balance = $budget['budget'];
 ?>
 <!doctype html>
 <html lang="en">
@@ -15,6 +18,7 @@ if(!$_SESSION['name']){
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Hugo 0.84.0">
     <title>Force COA- Evaluation Test</title>
+    <!-- <link href="assets/css/style.css" rel="stylesheet"> -->
 
     <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/dashboard/">
 
@@ -44,12 +48,17 @@ if(!$_SESSION['name']){
     <link href="assets/css/dashboard.css" rel="stylesheet">
   </head>
   <body>
-    
+
 <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-  <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="#">Company name</a>
+  <button class="btn btn-info" data-bs-toggle="modal" data-bs-target="#exampleModalDefault">
+Balance: <?php echo $balance; ?>Frw
+</button>
+  <!-- <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="#">Company name</a> -->
   <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
+  <div>
+  </div>
   <input class="form-control form-control-dark bg-dark w-100" type="text" aria-label="Search" disabled>
   <div class="navbar-nav">
     <div class="nav-item text-nowrap">
@@ -57,14 +66,13 @@ if(!$_SESSION['name']){
     </div>
   </div>
 </header>
-
 <div class="container-fluid">
   <div class="row">
     <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
       <div class="position-sticky pt-3">
         <ul class="nav flex-column">
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">
+            <a class="nav-link active" aria-current="page" href="index.php">
               <span data-feather="home"></span>
               Dashboard
             </a>
@@ -136,3 +144,36 @@ if(!$_SESSION['name']){
         </ul>
       </div>
     </nav>
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <?php
+      
+      if(isset($_POST['update-budget'])){
+
+        $balance_query = mysqli_query($connection, "SELECT * FROM budget WHERE month_year = DATE_FORMAT(NOW(), '%m-%Y')");
+
+        $row = mysqli_fetch_array($balance_query);
+        $id = $row['id'];
+        $new_budget = $row['budget'] + $_POST['budget'];
+        $update_balance_query = mysqli_query($connection, "UPDATE budget SET budget = $new_budget");
+
+        if($update_balance_query){
+          echo"<script>
+          setTimeout(function() {
+          window.location.href = 'index.php';
+          }, 1000);
+          </script>";
+          ?>
+              <div class="alert alert-success alert-dismissible fade show" role="alert">
+                  Budget Updated Successfuly
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+  <?php
+        }
+        
+      }
+
+    ?>
+
+
+

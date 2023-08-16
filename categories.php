@@ -1,7 +1,5 @@
 <?php include("includes/header.php")?>
 
-    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">Categories</h1>
         <!-- <div class="btn-toolbar mb-2 mb-md-0">
           <div class="btn-group me-2">
@@ -99,6 +97,28 @@
       <div class="row">
       <h4><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M912 192H328c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h584c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 284H328c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h584c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 284H328c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h584c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM104 228a56 56 0 1 0 112 0 56 56 0 1 0-112 0zm0 284a56 56 0 1 0 112 0 56 56 0 1 0-112 0zm0 284a56 56 0 1 0 112 0 56 56 0 1 0-112 0z"></path></svg>
                 All Categories</h2>
+                <?php
+            
+            if(isset($_GET['delete'])){
+                $delete = $_GET['delete'];
+                $delete_query = mysqli_query($connection, "DELETE FROM category WHERE id = $delete");
+                $delete_sub_query = mysqli_query($connection, "DELETE FROM subcategory WHERE main_category = $delete");
+
+            if($delete_query){
+                echo"<script>
+                    setTimeout(function() {
+                    window.location.href = 'categories.php';
+                    }, 1500);
+                    </script>";  
+            ?>
+             <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    Category Deleted
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            <?php
+             }
+            }
+            ?>
                 <table class="table table-hover">
                     <tr>
                         <th>Id</th>
@@ -117,9 +137,9 @@
                         <td><?php echo $id ;?></td>
                         <td><?php echo $category ;?></td>
                         <td><?php echo $created_at ;?></td>
-                        <td><a href="categories.php?theid=<?php echo $id; ?>" class=""><span data-feather="list"></span>All-Sub-Categories</a></td>
-                        <td><a href="" class="plus-cat text-info" data-bs-toggle="modal" data-id="<?php echo $id; ?>" data-bs-target="#exampleModalDefault"><span data-feather="plus"></span>Sub-Category</a></td>
-                        <td><a href="#" class="text-danger"><span data-feather="trash"></span></a></td>
+                        <!-- <td><a href="categories.php?theid=<?php echo $id; ?>" class=""><span data-feather="list"></span>All-Sub-Categories</a></td> -->
+                        <td><a href="view-category.php?id=<?php echo $id?>" class="plus-cat text-info" ><span data-feather="eye"></span>View</a></td>
+                        <td><a href="categories.php?delete=<?php echo $id; ?>" class="text-danger"><span data-feather="trash" onclick="return confirmDelete();"></span></a></td>
                     </tr>
                     <?php
                         }
@@ -133,31 +153,10 @@
   </div>
 </div>
 
-<div class="modal fade" id="exampleModalDefault" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        ...
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
-    </div>
-  </div>
-</div>
-
 <script>
-    $(document).ready(function(){
-    $('.plus-cat').click(function(){
-        id = $(this).data('id')
-
-        alert(id)
-    })
-})
+function confirmDelete() {
+    return confirm("Are you sure you want to delete This Categroy. Becouse if you do it will delete it's all sub-categories!!");
+}
 </script>
+
 <?php include"includes/footer.php";?>
