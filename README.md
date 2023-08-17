@@ -16,5 +16,5 @@ As a developer, Eric approaches you to develop a web application for him that ha
 - To be able to link expenses with related categories or subcategories.
 - Display transactions summary in a visualized way.
 
-for any Additional adia feel free to make a PR or let me knwo what to do or to collect in any case.
+for any Additional idea feel free to make a PR or let me knwo what to do or to collect in any case.
 ###### Thank you
