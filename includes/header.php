@@ -80,7 +80,7 @@ $_SESSION['balance'] = $balance;
   <input class="form-control form-control-dark bg-dark w-100" type="text" aria-label="Search" disabled>
   <div class="navbar-nav">
     <div class="nav-item text-nowrap">
-      <a class="nav-link px-3" href="#">Sign out</a>
+      <a class="nav-link px-3" href="signout.php">Sign out</a>
     </div>
   </div>
 </header>
