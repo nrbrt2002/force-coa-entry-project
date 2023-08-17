@@ -59,9 +59,18 @@ $_SESSION['balance'] = $balance;
   <body>
 
 <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-  <button class="btn btn-info" data-bs-toggle="modal" data-bs-target="#exampleModalDefault">
-Balance: <?php echo $_SESSION['balance']; ?>Frw
-</button>
+  <?php 
+  if($_SESSION['balance'] > 0){
+    echo " <button class=\"btn btn-info\" data-bs-toggle=\"modal\" data-bs-target=\"#exampleModalDefault\">
+    Balance: ".$_SESSION['balance']."Frw
+    </button>";
+  }else{
+    echo "  <button class=\"btn btn-danger\" data-bs-toggle=\"modal\" data-bs-target=\"#exampleModalDefault\">
+    Balance: ".$_SESSION['balance']."Frw
+    </button>";
+  }
+  ?>
+
   <!-- <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="#">Company name</a> -->
   <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -176,18 +185,18 @@ Balance: <?php echo $_SESSION['balance']; ?>Frw
                     Budget Added Successfuly
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
-    <?php }else{ ?>
+    <?php } }else{ ?>
 
     <?php 
         $id = $row['id'];
         $new_budget = $row['budget'] + $_POST['budget'];
-        $update_balance_query = mysqli_query($connection, "UPDATE budget SET budget = $new_budget where month_year = DATE_FORMAT(NOW(), '%m-%Y')");
+        $update_balance_query = mysqli_query($connection, "UPDATE budget SET budget = $new_budget where month_year = DATE_FORMAT(NOW(), '%Y-%m')");
 
         if($update_balance_query){
           echo"<script>
           setTimeout(function() {
           window.location.href = 'index.php';
-          }, 1000);
+          }, 2000);
           </script>";
           ?>
               <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -198,7 +207,6 @@ Balance: <?php echo $_SESSION['balance']; ?>Frw
         }
       }
       }
-    }
     ?>
 <?php
 $date = date('Y-m-d');
