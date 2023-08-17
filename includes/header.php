@@ -1,4 +1,6 @@
 <?php
+// error_reporting(0);
+
 $connection = mysqli_connect('localhost', 'root', '', 'Force COA');
 session_start();
 if(!$_SESSION['name']){
@@ -7,7 +9,12 @@ if(!$_SESSION['name']){
 
 $select_balance_query = mysqli_query($connection, "SELECT * FROM budget WHERE month_year = DATE_FORMAT(NOW(), '%m-%Y')");
 $budget = mysqli_fetch_array($select_balance_query);
-$balance = $budget['budget'];
+if($budget == null){
+  $balance = 0;
+}else{
+  $balance = $budget['budget'];
+}
+$_SESSION['balance'] = $balance;
 ?>
 <!doctype html>
 <html lang="en">
@@ -18,7 +25,7 @@ $balance = $budget['budget'];
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Hugo 0.84.0">
     <title>Force COA- Evaluation Test</title>
-    <!-- <link href="assets/css/style.css" rel="stylesheet"> -->
+    <link href="assets/css/style.css" rel="stylesheet">
 
     <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/dashboard/">
 
@@ -82,21 +89,20 @@ Balance: <?php echo $balance; ?>Frw
               <span data-feather="list"></span>
               Categories
             </a>
-            <!--
           </li>
            <li class="nav-item">
-            <a class="nav-link" href="#">
-              <span data-feather="shopping-cart"></span>
-              Products
+            <a class="nav-link" href="accounts.php">
+              <span data-feather="credit-card"></span>
+              Accounts
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">
-              <span data-feather="users"></span>
-              Customers
+            <a class="nav-link" href="transaction.php">
+              <span data-feather="bar-chart-2"></span>
+              Transactions 
             </a>
           </li>
-          <li class="nav-item">
+          <!--<li class="nav-item">
             <a class="nav-link" href="#">
               <span data-feather="bar-chart-2"></span>
               Reports
@@ -174,6 +180,41 @@ Balance: <?php echo $balance; ?>Frw
       }
 
     ?>
+<?php
+$date = date('Y-m-d');
+$theFirstday = date("d");
+$monthName = date('F', strtotime($date));
+if ($theFirstday == 16 && $_SESSION['balance'] == 0) {
+?>
+<div class="popup-overlay">
+        <div class="popup-content">
+           <h1>Add <?php   echo $monthName; ?> Budget</h1>
+           <hr>
 
+           <?php
+            if (isset($_POST['add-budget'])) {
+              $new_budget = $_POST['new-budget'];
+              $add_budget_query = mysqli_query($connection, "INSERT INTO budget VALUES('', DATE_FORMAT(NOW(), '%m-%Y'), $new_budget)");
+              if($add_budget_query){
+                echo"<script>
+                setTimeout(function() {
+                window.location.href = 'index.php';
+                }, 1000);
+                </script>";
+            }
+           }
+           ?>
 
+           <form action="" method="post">
+            <div class=" mb-3">
+                  <label>Amount:</label>
+                  <input type="number" name="new-budget" class="form-control" placeholder="10000000" required><br>
+                  <input type="submit" name="add-budget" class="btn btn-primary" value="Update">
 
+              </div>
+           </form>
+            <!-- <button id="close-popup">Close</button> -->
+        </div>
+    </div>
+
+<?php } ?>
