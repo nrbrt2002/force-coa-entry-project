@@ -7,7 +7,7 @@ if(!$_SESSION['name']){
     header("Location: login.php");
 }
 
-$select_balance_query = mysqli_query($connection, "SELECT * FROM budget WHERE month_year = DATE_FORMAT(NOW(), '%m-%Y')");
+$select_balance_query = mysqli_query($connection, "SELECT * FROM budget WHERE month_year = DATE_FORMAT(NOW(), '%Y-%m')");
 $budget = mysqli_fetch_array($select_balance_query);
 if($budget == null){
   $balance = 0;
@@ -117,16 +117,16 @@ Balance: <?php echo $balance; ?>Frw
         </ul>
 
         <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-          <span>Saved reports</span>
+          <span>Generate reports</span>
           <a class="link-secondary" href="#" aria-label="Add a new report">
             <span data-feather="plus-circle"></span>
           </a>
         </h6>
         <ul class="nav flex-column mb-2">
           <li class="nav-item">
-            <a class="nav-link" href="#">
+            <a class="nav-link" href="report.php">
               <span data-feather="file-text"></span>
-              Current month
+              Generate
             </a>
           </li>
           <!-- <li class="nav-item">
@@ -184,7 +184,7 @@ Balance: <?php echo $balance; ?>Frw
 $date = date('Y-m-d');
 $theFirstday = date("d");
 $monthName = date('F', strtotime($date));
-if ($theFirstday == 1 && $_SESSION['balance'] == 0) {
+if ($theFirstday == 17 && $_SESSION['balance'] == 0) {
 ?>
 <div class="popup-overlay">
         <div class="popup-content">
@@ -194,7 +194,7 @@ if ($theFirstday == 1 && $_SESSION['balance'] == 0) {
            <?php
             if (isset($_POST['add-budget'])) {
               $new_budget = $_POST['new-budget'];
-              $add_budget_query = mysqli_query($connection, "INSERT INTO budget VALUES('', DATE_FORMAT(NOW(), '%m-%Y'), $new_budget)");
+              $add_budget_query = mysqli_query($connection, "INSERT INTO budget VALUES('', DATE_FORMAT(NOW(), '%Y-%m'), $new_budget)");
               if($add_budget_query){
                 echo"<script>
                 setTimeout(function() {

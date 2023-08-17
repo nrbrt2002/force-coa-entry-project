@@ -110,7 +110,7 @@
                                 $select_query = mysqli_query($connection, "SELECT * FROM account ORDER BY id DESC");
                                     while($row = mysqli_fetch_array($select_query)){
                                         $id = $row['id'];
-                                        $name = $row['name'];
+                                        $name = $row['account_name'];
                                         $created_at = $row['created_at'];
                                     ?>
                             <option value="<?php echo $id?>"><?php echo $name?></option>

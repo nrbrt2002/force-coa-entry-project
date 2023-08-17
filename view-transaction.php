@@ -10,7 +10,7 @@
                     $payment_by = $row['payment_by'];
                     $sub_category_id = $row['sub_category_id'];
 
-                    $select_all_query = mysqli_query($connection, "SELECT transaction.id, transaction.name, transaction.type, transaction.payment_by, transaction.sub_category_id, transaction.date, transaction.total_paid, transaction.description, subcategory.id, subcategory.sub_category_name, subcategory.main_category, subcategory.created_at, account.id, account.account_name, account.created_at, category.category_name FROM transaction, subcategory, account, category WHERE transaction.id = 2 AND subcategory.id = 19 AND account.id = 4 AND category.id = subcategory.main_category;");
+                    $select_all_query = mysqli_query($connection, "SELECT transaction.id, transaction.name, transaction.type, transaction.payment_by, transaction.sub_category_id, transaction.date, transaction.total_paid, transaction.description, subcategory.id, subcategory.sub_category_name, subcategory.main_category, subcategory.created_at, account.id, account.account_name, account.created_at, category.category_name FROM transaction, subcategory, account, category WHERE transaction.id = $id AND subcategory.id = $sub_category_id AND account.id = $payment_by AND category.id = subcategory.main_category;");
                     $data = mysqli_fetch_array($select_all_query);
 
                     $id = $data['id'];
