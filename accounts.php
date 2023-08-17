@@ -48,7 +48,7 @@
                 <div class="form-row align-items-center">
                     <div class="col-auto">
                     <label class="sr-only" for="inlineFormInput">Account:</label>
-                    <input type="text" class="form-control mb-2" name="account_name" id="inlineFormInput" placeholder="Account name">
+                    <input type="text" class="form-control mb-2" name="account_name" id="inlineFormInput" placeholder="Account name" required>
                     </div>
                     <div class="col-auto">
                         <input type="submit" name="add_account" class="btn btn-primary mb-2" value="+">

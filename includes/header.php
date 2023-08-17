@@ -2,6 +2,7 @@
 // error_reporting(0);
 
 $connection = mysqli_connect('localhost', 'root', '', 'Force COA');
+ini_set('session.gc_maxlifetime', 1800);
 session_start();
 if(!$_SESSION['name']){
     header("Location: login.php");
@@ -48,6 +49,7 @@ $_SESSION['balance'] = $balance;
           font-size: 3.5rem;
         }
       }
+      
     </style>
 
     
@@ -58,7 +60,7 @@ $_SESSION['balance'] = $balance;
 
 <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
   <button class="btn btn-info" data-bs-toggle="modal" data-bs-target="#exampleModalDefault">
-Balance: <?php echo $balance; ?>Frw
+Balance: <?php echo $_SESSION['balance']; ?>Frw
 </button>
   <!-- <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="#">Company name</a> -->
   <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
@@ -156,12 +158,30 @@ Balance: <?php echo $balance; ?>Frw
       
       if(isset($_POST['update-budget'])){
 
-        $balance_query = mysqli_query($connection, "SELECT * FROM budget WHERE month_year = DATE_FORMAT(NOW(), '%m-%Y')");
-
+        $balance_query = mysqli_query($connection, "SELECT * FROM budget WHERE month_year = DATE_FORMAT(NOW(), '%Y-%m')");
         $row = mysqli_fetch_array($balance_query);
+
+        if($row == null){
+          $the_budget = $_POST['budget'];
+          $insert_balance_query = mysqli_query($connection, "INSERT INTO budget VALUES('', DATE_FORMAT(NOW(), '%m-%Y'), $the_budget)");
+
+          if($insert_balance_query){
+            echo"<script>
+            setTimeout(function() {
+            window.location.href = 'index.php';
+            }, 1000);
+            </script>";
+            ?>
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    Budget Added Successfuly
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+    <?php }else{ ?>
+
+    <?php 
         $id = $row['id'];
         $new_budget = $row['budget'] + $_POST['budget'];
-        $update_balance_query = mysqli_query($connection, "UPDATE budget SET budget = $new_budget");
+        $update_balance_query = mysqli_query($connection, "UPDATE budget SET budget = $new_budget where month_year = DATE_FORMAT(NOW(), '%m-%Y')");
 
         if($update_balance_query){
           echo"<script>
@@ -176,15 +196,15 @@ Balance: <?php echo $balance; ?>Frw
               </div>
   <?php
         }
-        
       }
-
+      }
+    }
     ?>
 <?php
 $date = date('Y-m-d');
 $theFirstday = date("d");
 $monthName = date('F', strtotime($date));
-if ($theFirstday == 17 && $_SESSION['balance'] == 0) {
+if ($theFirstday == 1 && $_SESSION['balance'] == 0) {
 ?>
 <div class="popup-overlay">
         <div class="popup-content">

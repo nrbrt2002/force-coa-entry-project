@@ -18,30 +18,8 @@
       <?php
       if (isset($_GET['new'])) {
         ?>
-            <?php
             
-            if (isset($_POST['add_account'])) {
-                $account_name = $_POST['account_name'];
-                $account_name = mysqli_real_escape_string($connection, $account_name);
-                
-                $query = mysqli_query($connection, "INSERT INTO account VALUES('', '$account_name', now())");
-
-            if($query){
-                echo"<script>
-                setTimeout(function() {
-                window.location.href = 'accounts.php';
-                }, 2000);
-                </script>";
-                ?>
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    Account Added successfuly
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-        <?php
-                }
-            }    
-        ?>
-            <h4><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M880 112H144c-17.7 0-32 14.3-32 32v736c0 17.7 14.3 32 32 32h736c17.7 0 32-14.3 32-32V144c0-17.7-14.3-32-32-32zM704 536c0 4.4-3.6 8-8 8H544v152c0 4.4-3.6 8-8 8h-48c-4.4 0-8-3.6-8-8V544H328c-4.4 0-8-3.6-8-8v-48c0-4.4 3.6-8 8-8h152V328c0-4.4 3.6-8 8-8h48c4.4 0 8 3.6 8 8v152h152c4.4 0 8 3.6 8 8v48z"></path></svg>Add Account</h4>
+            <h4><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M880 112H144c-17.7 0-32 14.3-32 32v736c0 17.7 14.3 32 32 32h736c17.7 0 32-14.3 32-32V144c0-17.7-14.3-32-32-32zM704 536c0 4.4-3.6 8-8 8H544v152c0 4.4-3.6 8-8 8h-48c-4.4 0-8-3.6-8-8V544H328c-4.4 0-8-3.6-8-8v-48c0-4.4 3.6-8 8-8h152V328c0-4.4 3.6-8 8-8h48c4.4 0 8 3.6 8 8v152h152c4.4 0 8 3.6 8 8v48z"></path></svg>Record Transaction</h4>
 
             <?php
                 if(isset($_POST['add_transaction'])){   
@@ -59,7 +37,7 @@
                         $new_budget = $_SESSION['balance'] - $_POST['total_paid'];
                     }
             $transaction_query = mysqli_query($connection, "INSERT INTO transaction VALUES ('', '$name', '$type', '$payment_by', '$sub_category_id', NOW(), $total_paid, '$description')");
-            $update_balance_query = mysqli_query($connection, "UPDATE budget SET budget = $new_budget");            
+            $update_balance_query = mysqli_query($connection, "UPDATE budget SET budget = $new_budget WHERE month_year = date_format(now(), '%Y-%m')");            
 
         if($transaction_query){
                 echo"<script>
@@ -69,7 +47,7 @@
                     </script>";  
             ?>
              <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                    Transaction added. I updated your Balance too.
+                    Transaction recorded. I updated your Balance too.
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             <?php
@@ -80,7 +58,7 @@
             <div class="row">
                 <div class="col-md-6">
                         <div class="col-auto">
-                        <label class="sr-only" for="inlineFormInput">Name:</label>
+                        <label class="sr-only" for="inlineFormInput">Transaction Title:</label>
                         <input type="text" class="form-control mb-2" name="name" id="inlineFormInput" placeholder="Account name">
                         </div>
                         <div class="col-auto">

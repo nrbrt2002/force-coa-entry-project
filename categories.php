@@ -40,7 +40,7 @@
                 <div class="form-row align-items-center">
                     <div class="col-auto">
                     <label class="sr-only" for="inlineFormInput">Category:</label>
-                    <input type="text" class="form-control mb-2" name="category_name" id="inlineFormInput" placeholder="Category name">
+                    <input type="text" class="form-control mb-2" name="category_name" id="inlineFormInput" placeholder="Category name" required>
                     </div>
                     <div class="col-auto">
                         <input type="submit" name="add_category" class="btn btn-primary mb-2" value="+">
